@@ -1,3 +1,10 @@
+"""
+   Felipe Deaza - 23ft
+   Modelo SIR en python!
+
+   2022
+"""
+
 from sympy import *
 from scipy.integrate import odeint
 import numpy as np
@@ -7,7 +14,7 @@ from matplotlib.widgets import Slider
 
 def _grafica_resistentes():
    plt.plot(time, solution[0][:,2], lw = 1.5, color = 'purple')
-   plt.plot(time, solution_with_vaccine[0][:,2], lw = 1.5, color = 'brown')
+   plt.plot(time, solutionWithVaccine[0][:,2], lw = 1.5, color = 'brown')
    plt.title('$Resistentes$ $R_{(t)}$')
    plt.xlabel('$t_{(weeks)}$')
    plt.ylabel('$R_{(t)}$')
@@ -18,7 +25,7 @@ def _grafica_resistentes():
 
 def _grafica_infectados():
    plt.plot(time, solution[0][:,1], lw = 1.5, color = 'red')
-   plt.plot(time, solution_with_vaccine[0][:,1], lw = 1.5, color = 'orange')
+   plt.plot(time, solutionWithVaccine[0][:,1], lw = 1.5, color = 'orange')
    plt.xlabel('$t_{(weeks)}$')
    plt.ylabel('$I_{(t)}$')
    plt.title('$Infectados$ $I_{(t)}$')
@@ -29,7 +36,7 @@ def _grafica_infectados():
 
 def _grafica_sucep():
    plt.plot(time, solution[0][:,0], lw = 1.5, color = 'green')
-   plt.plot(time, solution_with_vaccine[0][:,0], lw = 1.5, color = 'blue')
+   plt.plot(time, solutionWithVaccine[0][:,0], lw = 1.5, color = 'blue')
    plt.subplots_adjust(left=0.19)
    plt.title('$Suceptibles$ $S_{(t)}$')
    plt.xlabel('$t_{(weeks)}$')
@@ -47,7 +54,7 @@ def graficacion():
    #figure.supylabel('s')
 
    ax1.plot(time, solution[0][:,0], lw = 1.5, color = 'green')
-   ax1.plot(time, solution_with_vaccine[0][:,0], lw = 1.5, color = 'blue')
+   ax1.plot(time, solutionWithVaccine[0][:,0], lw = 1.5, color = 'blue')
    ax1.set_title('$Suceptibles$ $S_{(t)}$')
    ax1.set_xlabel('$t_{(weeks)}$')
    ax1.set_ylabel('$S_{(t)}$')
@@ -55,7 +62,7 @@ def graficacion():
    ax1.grid(True)
 
    ax2.plot(time, solution[0][:,1], lw = 1.5, color = 'red')
-   ax2.plot(time, solution_with_vaccine[0][:,1], lw = 1.5, color = 'orange')
+   ax2.plot(time, solutionWithVaccine[0][:,1], lw = 1.5, color = 'orange')
    ax2.set_xlabel('$t_{(weeks)}$')
    ax2.set_ylabel('$I_{(t)}$')
    ax2.set_title('$Infectados$ $I_{(t)}$')
@@ -63,7 +70,7 @@ def graficacion():
    ax2.grid(True)
 
    ax3.plot(time, solution[0][:,2], lw = 1.5, color = 'purple')
-   ax3.plot(time, solution_with_vaccine[0][:,2], lw = 1.5, color = 'brown')
+   ax3.plot(time, solutionWithVaccine[0][:,2], lw = 1.5, color = 'brown')
    ax3.set_title('$Resistentes$ $R_{(t)}$')
    ax3.set_xlabel('$t_{(weeks)}$')
    ax3.set_ylabel('$R_{(t)}$')
@@ -78,7 +85,7 @@ def Vacunados(N,v,e):
     """ Aplicando la formula V = (Nve)/9 --> para el calculo numero individuos vacunados cada semana """
     return ((N*v*e)/9) 
 
-def model_with_vaccine(t, x, B, Y, N,v,e):
+def modelWithVaccine(t, x, B, Y, N,v,e):
     
    S = x[0] # suceptibles
    I = x[1] # infectados
@@ -94,7 +101,7 @@ def model_with_vaccine(t, x, B, Y, N,v,e):
    
    return [dS, dI, dR]
 
-def model_without_vaccine(t, x, B, Y):
+def modelWithoutVaccine(t, x, B, Y):
     
    S = x[0] # suceptibles
    I = x[1] # infectados
@@ -123,7 +130,7 @@ time = np.linspace(0,51,52) # del 0 al 10, 2501 datos.
 print(time)
 y0 = [S0, I0, R0]
 
-solution = odeint(model_without_vaccine, y0, time, full_output=True, tfirst=True, args=(B, Y))
-solution_with_vaccine = odeint(model_with_vaccine, y0, time, full_output=True, tfirst=True, args=(B, Y, N,v,e))
+solution = odeint(modelWithoutVaccine, y0, time, full_output=True, tfirst=True, args=(B, Y))
+solutionWithVaccine = odeint(modelWithVaccine, y0, time, full_output=True, tfirst=True, args=(B, Y, N,v,e))
 
 graficacion()
